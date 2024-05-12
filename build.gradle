@@ -21,9 +21,9 @@ repositories {
 }
 
 dependencies {
-    api "xyz.wagyourtail.jvmdowngrader:jvmdowngrader:0.1.0"
+    api "xyz.wagyourtail.jvmdowngrader:jvmdowngrader:0.1.2"
     // Replacement classes for java APIs used by in the downgrading process jvmdowngrader
-    runtimeOnly "xyz.wagyourtail.jvmdowngrader:jvmdowngrader-java-api:0.1.0"
+    runtimeOnly "xyz.wagyourtail.jvmdowngrader:jvmdowngrader-java-api:0.1.2"
     // https://mvnrepository.com/artifact/org.ow2.asm/asm
     // (Transitive dependency of jvmdowngrader - even though jvmdowngrader does not declare it for whatever reason)
     api "org.ow2.asm:asm:9.7"

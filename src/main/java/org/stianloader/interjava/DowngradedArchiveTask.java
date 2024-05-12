@@ -43,6 +43,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.stianloader.interjava.supertypes.ASMClassWrapperProvider;
 import org.stianloader.interjava.supertypes.ClassWrapper;
 import org.stianloader.interjava.supertypes.ClassWrapperPool;
+import org.stianloader.interjava.supertypes.J8CWPComputingClassWriter;
 import org.stianloader.interjava.supertypes.ReflectionClassWrapperProvider;
 
 import xyz.wagyourtail.jvmdg.ClassDowngrader;
@@ -191,15 +192,7 @@ public abstract class DowngradedArchiveTask extends AbstractArchiveTask {
                             for (VersionProvider downgradeProvider : downgrader.versionProviders(node.version)) {
                                 downgradeProvider.downgrade(node, extra, true, nodeLookup::apply);
                             }
-                            ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES) {
-                                @Override
-                                protected String getCommonSuperClass(String type1, String type2) {
-                                    if (type1 == null || type2 == null) {
-                                        throw new NullPointerException("One of the child classes is null: " + (type1 == null) + ", " + (type2 == null));
-                                    }
-                                    return wrapperPool.getCommonSuperClass(wrapperPool.get(type1), wrapperPool.get(type2)).getName();
-                                }
-                            };
+                            ClassWriter writer = new J8CWPComputingClassWriter(wrapperPool, ClassWriter.COMPUTE_FRAMES);
                             node.accept(writer);
                             result = writer.toByteArray();
                         } catch (Throwable e2) {
@@ -251,15 +244,7 @@ public abstract class DowngradedArchiveTask extends AbstractArchiveTask {
                         }
 
                         zipOut.putNextEntry(new ZipEntry(classPath));
-                        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES) {
-                            @Override
-                            protected String getCommonSuperClass(String type1, String type2) {
-                                if (type1 == null || type2 == null) {
-                                    throw new NullPointerException("One of the child classes is null: " + (type1 == null) + ", " + (type2 == null));
-                                }
-                                return wrapperPool.getCommonSuperClass(wrapperPool.get(type1), wrapperPool.get(type2)).getName();
-                            }
-                        };
+                        ClassWriter writer = new J8CWPComputingClassWriter(wrapperPool, ClassWriter.COMPUTE_FRAMES);
                         extraNode.accept(writer);
                         zipOut.write(writer.toByteArray());
                         zipOut.closeEntry();

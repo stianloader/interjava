@@ -43,7 +43,7 @@ final class CachingClassNodeLookup implements Function<String, ClassNode> {
         }
 
         ClassReader reader = new ClassReader(data);
-        reader.accept((node = new ClassNode()), 0);
+        reader.accept((node = new ClassNode()), ClassReader.SKIP_FRAMES);
         this.classnodeCache.put(t, node);
         return node;
     }
