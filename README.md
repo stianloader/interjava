@@ -11,9 +11,10 @@ as-is without further issues.
 
 ## Maven
 
-At this point in time this project is not yet included in our CI/CD pipelines
-and as such not present in our usual maven repositories. This will change
-soon enough however (unless the entire plugin is deemed frivolous).
+The plugin is available under our maven repository: https://stianloader.org/maven
+
+Beware that we use a not-so-traditional versioning scheme, so ensure you
+are using the proper version.
 
 ## Examples
 
@@ -29,7 +30,7 @@ build.gradle:
 plugins {
     // [...]
 
-    id 'org.stianloader.interjava' version '0.1.0'
+    id 'org.stianloader.interjava' version '0.1.0-a20240512'
 }
 ```
 
@@ -40,10 +41,13 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
-        mavenLocal()
 
         // [...]
 
+        maven {
+            name = 'stianloader-maven'
+            url = 'https://stianloader.org/maven/'
+        }
         maven {
             name = "wagyourtail"
             url = "https://maven.wagyourtail.xyz/releases"
@@ -181,7 +185,7 @@ repositories {
 }
 
 dependencies {
-    implementation (group: 'de.geolykt', name: 'jlsl', version: '1.0', classifier: 'j8')
+    implementation (group: 'org.stianloader', name: 'jlsl', version: '1.0.0', classifier: 'j8')
 }
 ```
 
